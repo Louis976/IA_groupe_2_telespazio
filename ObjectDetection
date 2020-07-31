@@ -1,0 +1,23 @@
+from imageai.Detection import ObjectDetection
+import os
+
+execution_path = (
+    os.getcwd()
+)  # récupère le chemin d'acces au fichier en cours d'execution
+
+detection = ObjectDetection()  # création d'une instance de la classe ObjectDetection
+detection.setModelTypeAsRetinaNet()  # définition du type de model
+detection.setModelPath(
+    os.path.join(execution_path, "resnet50_coco_best_v2.0.1.h5")
+)  # récupération du fichier du modèle
+detection.loadModel()  # chargement du modèle
+for i in range(1, 7):
+    detections = detection.detectObjectsFromImage(
+        input_image=os.path.join(execution_path, "image" + str(i) + ".jpg"),
+        output_image_path=os.path.join(execution_path, "imagenew" + str(i) + ".jpg")
+    )  # récuperation d'image et création de l'image de sortie
+    print("\n------Image " + str(i) + "------")
+    for (eachObject) in (detections):  # on parcours tous les résultats renvoyés par la fonction detection.detectObjectsFromImage
+        print(
+            eachObject["name"], " : ", eachObject["percentage_probability"]
+        )  # puis on imprime le nom et le % de probabilité du modèle sur chaque objet détecté dans l'image
